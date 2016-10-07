@@ -1,0 +1,46 @@
+rm /home/dap/workspace/volttron/volttron.log
+rm -rf /home/dap/.volttron/agents/* 2> /dev/null
+rm /home/dap/.volttron/packaged/* 2> /dev/null
+
+cd workspace/volttron
+
+##### Build and install
+# Activate Volttron
+. env/bin/activate
+
+## Test Agent
+# Packaged the agent
+#volttron-pkg package applications/dap/TestWeatherAgent
+volttron-pkg package applications/dap/TestAgent
+#volttron-pkg package applications/dap/ListenerAgent
+volttron-pkg package services/core/WeatherAgent
+
+# Configure the agent
+volttron-pkg configure ~/.volttron/packaged/weatheragent-3.0-py2-none-any.whl services/core/WeatherAgent/weatheragent.config
+#volttron-pkg configure ~/.volttron/packaged/testweatheragent-3.0-py2-none-any.whl applications/dap/TestWeatherAgent/testweatheragent.config
+volttron-pkg configure ~/.volttron/packaged/testeragent-3.0-py2-none-any.whl applications/dap/TestAgent/testagent.config
+#volttron-pkg configure ~/.volttron/packaged/listeneragent-3.0-py2-none-any.whl applications/dap/ListenerAgent/config
+
+# Install the test agent
+volttron-ctl install ~/.volttron/packaged/weatheragent-3.0-py2-none-any.whl
+#volttron-ctl install ~/.volttron/packaged/testweatheragent-3.0-py2-none-any.whl
+volttron-ctl install ~/.volttron/packaged/testeragent-3.0-py2-none-any.whl
+#volttron-ctl install ~/.volttron/packaged/listeneragent-3.0-py2-none-any.whl
+
+# Start log
+volttron -l volttron.log -vv&
+
+
+# Start weather agent
+volttron-ctl start --name weatheragent-3.0
+volttron-ctl start --name testeragent-3.0
+#volttron-ctl start --name listeneragent-3.0
+
+# Check if running
+volttron-ctl status
+
+gedit volttron.log
+
+
+
+

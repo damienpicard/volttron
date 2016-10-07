@@ -1,0 +1,46 @@
+cd workspace/volttron
+
+##### Build and install
+# Activate Volttron
+. env/bin/activate
+
+## Test Agent
+# Packaged the agent
+volttron-pkg package applications/dap/TestAgent
+
+# Configure the agent
+volttron-pkg configure ~/.volttron/packaged/testeragent-3.0-py2-none-any.whl applications/TestAgent/testagent.config
+
+# Install the test agent
+volttron-ctl install ~/.volttron/packaged/testeragent-3.0-py2-none-any.whl
+
+## Listener Agent
+# package the listener agent
+volttron-pkg package applications/dap/ListenerAgent
+
+# Configure the agent
+volttron-pkg configure ~/.volttron/packaged/listeneragent-3.0-py2-none-any.whl examples/ListenerAgent/config
+
+# Install the listener agent
+volttron-ctl install ~/.volttron/packaged/listeneragent-3.0-py2-none-any.whl
+
+##### Testing agents
+# Activate log
+volttron -l volttron.log -vv&
+
+# Lauch the agents
+volttron-ctl start --name listeneragent-3.0
+volttron-ctl start --name testeragent-3.0
+
+# Check if running
+volttron-ctl status
+
+# check log file for messages indicating that testagenet is receiving the listeneragents messages.
+tail volttron.log
+
+
+
+
+
+
+

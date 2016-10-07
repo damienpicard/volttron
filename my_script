@@ -1,0 +1,48 @@
+#!/bin/bash
+# My first script
+
+rm /home/dap/workspace/volttron/volttron.log 2> /dev/null
+rm -rf /home/dap/.volttron/agents/* 2> /dev/null
+rm /home/dap/.volttron/packaged/* 2> /dev/null
+
+##### Build and install
+# Activate Volttron
+. env/bin/activate
+
+function installAgents {
+	# Package the agent
+	echo "******** Installation of ${agentName[$i]}"
+	volttron-pkg package ${path[$i]}/${agentFolder[$i]}
+	# Configure agent
+	volttron-pkg configure ~/.volttron/packaged/${agentName[$i]}-3.0-py2-none-any.whl ${path[$i]}/${agentFolder[$i]}/${agentName[$i]}.config
+	# Install agent
+	volttron-ctl install ~/.volttron/packaged/${agentName[$i]}-3.0-py2-none-any.whl
+}
+
+path=("applications/dap" "services/core")
+agentFolder=("TestAgent" "WeatherAgent")
+agentName=("testagent" "weatheragent")
+counter=(0 1)
+
+# Install agents
+for i in ${counter[*]}
+do
+	installAgents
+done
+
+# Start log
+volttron -l volttron.log -vv&
+
+# Start agents
+for i in ${counter[*]}
+do
+	# start agent
+	volttron-ctl start --name ${agentName[$i]}-3.0
+done
+	
+
+# check status agents
+volttron-ctl status
+
+# open log file
+gedit volltron.log

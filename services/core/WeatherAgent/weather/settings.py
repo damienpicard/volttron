@@ -1,2 +1,2 @@
-KEY = "<INSERT YOUR KEY HERE>"
+KEY = "3f9b49828ff28e45"
 
