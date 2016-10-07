@@ -44,5 +44,6 @@ done
 # check status agents
 volttron-ctl status
 
-# open log file
-gedit volltron.log
+# open log file after 5 seconds
+#sleep 5
+#gedit volltron.log

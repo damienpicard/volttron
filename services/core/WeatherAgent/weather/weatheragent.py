@@ -182,14 +182,13 @@ def weather_service(config_path, **kwargs):
     agent_id = get_config('agentid')
     poll_time = get_config('poll_time')
     zip_code = get_config("zip")
+    state = get_config("state")
+    country = get_config("country")
+    city = get_config("city")
     key = get_config('key')
     on_request_only = get_config('on_request_only')
 
-    state = ''
-    country = ''
-    city = ''
     region = state if state != "" else country
-    city = city
     max_requests_per_day = get_config('daily_threshold')
     max_requests_per_minute = get_config('minute_threshold')
 
@@ -216,7 +215,7 @@ def weather_service(config_path, **kwargs):
             self.requestUrl = self.baseUrl
             if(zip_code != ""):
                 self.requestUrl += zip_code + ".json"
-            elif self.region != "":
+            elif region != "":
                 self.requestUrl += region + "/" + city + ".json"
             else:
                 # Error Need to handle this
