@@ -1,6 +1,8 @@
 #!/bin/bash
 # My first script
 
+cd workspace/volttron/
+
 rm /home/dap/workspace/volttron/volttron.log 2> /dev/null
 rm -rf /home/dap/.volttron/agents/* 2> /dev/null
 rm /home/dap/.volttron/packaged/* 2> /dev/null
@@ -14,15 +16,15 @@ function installAgents {
 	echo "******** Installation of ${agentName[$i]}"
 	volttron-pkg package ${path[$i]}/${agentFolder[$i]}
 	# Configure agent
-	volttron-pkg configure ~/.volttron/packaged/${agentName[$i]}-3.0-py2-none-any.whl ${path[$i]}/${agentFolder[$i]}/${agentName[$i]}.config
+	volttron-pkg configure ~/.volttron/packaged/${agentName[$i]}agent-3.0-py2-none-any.whl ${path[$i]}/${agentFolder[$i]}/${agentName[$i]}.config
 	# Install agent
-	volttron-ctl install ~/.volttron/packaged/${agentName[$i]}-3.0-py2-none-any.whl
+	volttron-ctl install ~/.volttron/packaged/${agentName[$i]}agent-3.0-py2-none-any.whl
 }
 
-path=("applications/dap" "services/core")
-agentFolder=("TestAgent" "WeatherAgent")
-agentName=("testagent" "weatheragent")
-counter=(0 1)
+path=("applications/dap" "services/core" "services/core" "applications/dap")
+agentFolder=("TestAgent" "WeatherAgent" "sMAPHistorian" "ExampleSubscriber")
+agentName=("test" "weather" "historian" "subscriber")
+counter=(3)
 
 # Install agents
 for i in ${counter[*]}
@@ -37,7 +39,7 @@ volttron -l volttron.log -vv&
 for i in ${counter[*]}
 do
 	# start agent
-	volttron-ctl start --name ${agentName[$i]}-3.0
+	volttron-ctl start --name ${agentName[$i]}agent-3.0
 done
 	
 
@@ -45,5 +47,6 @@ done
 volttron-ctl status
 
 # open log file after 5 seconds
-#sleep 5
+#sleep 300
+#volttron-ctl shutdown
 #gedit volltron.log
