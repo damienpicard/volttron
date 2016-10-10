@@ -78,7 +78,7 @@ for use in subscriptions instead of hardcoding them.
 def subscriber_agent(config_path, **kwargs):
 	config = utils.load_config(config_path)
 	oat_point= config.get('oat_point')
-	all_topic = config.get('all_topic')
+	all_topics = config.get('all_topics')
 	
 	
 	class ExampleSubscriber(Agent):
@@ -98,7 +98,7 @@ def subscriber_agent(config_path, **kwargs):
 	
 	
 
-		@PubSub.subscribe('pubsub', all_topic)
+		@PubSub.subscribe('pubsub', all_topics)
 		def match_device_all(self, peer, sender, bus,  topic, headers, message):
 			'''
 			This method subscribes to all points under a device then pulls out 
@@ -139,15 +139,20 @@ def subscriber_agent(config_path, **kwargs):
 			print("TimeZone", message[1]['tz'])
 			print("Type", message[1]['type'])
 			
-		
+		"""		
 		@PubSub.subscribe('pubsub', '')
 		def on_match_all(self, peer, sender, bus,  topic, headers, message):
 			''' This method subscibes to all topics. It simply prints out the 
 			topic seen.
 			'''
 			print(topic)
-#	 
+	 	"""
+		
 		# Demonstrate periodic decorator and settings access
+		
+		@Core.periodic(10)
+		def send_request_weather(self):
+			self.vip.pubsub.publish(peer='pubsub',topic='weather/request',headers={'requesterID': 'agent1'},message={'region':'Belgium','city':'Leuven'})
 		
 		@Core.periodic(10)
 		def lookup_data(self):
@@ -177,7 +182,7 @@ def subscriber_agent(config_path, **kwargs):
 				print ("Could not contact historian. Is it running?")
 				print(e)
 		
-		@Core.periodic(10)
+		#@Core.periodic(10)
 		def pub_fake_data(self):
 			''' This method publishes fake data for use by the rest of the agent.
 			The format mimics the format used by VOLTTRON drivers.
@@ -247,7 +252,7 @@ def subscriber_agent(config_path, **kwargs):
 			
 			#Publish messages
 			self.vip.pubsub.publish(
-				'pubsub', all_topic, headers, all_message)
+				'pubsub', all_topics, headers, all_message)
 			
 			self.vip.pubsub.publish(
 				'pubsub', oat_point, headers, oat_message)

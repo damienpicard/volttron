@@ -244,7 +244,7 @@ def weather_service(config_path, **kwargs):
 
             return weather_dict
 
-        def publish_all(self, observation, topic_prefix="weather", headers={}):
+        def publish_all(self, observation, topic_prefix="weather/all_topics", headers={}):
             self.publish_subtopic(self.build_dictionary(observation),
                                   topic_prefix, headers)
 
