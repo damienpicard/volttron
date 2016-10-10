@@ -63,7 +63,7 @@ import sys
 from volttron.platform.vip.agent import Agent, Core, PubSub, compat
 from volttron.platform.agent import utils
 from volttron.platform.messaging import headers as headers_mod
-
+import os
 
 
 
@@ -79,7 +79,7 @@ def subscriber_agent(config_path, **kwargs):
 	config = utils.load_config(config_path)
 	oat_point= config.get('oat_point')
 	all_topics = config.get('all_topics')
-	
+	#query_point = config.get('query_point')
 	
 	class ExampleSubscriber(Agent):
 		'''
@@ -150,9 +150,11 @@ def subscriber_agent(config_path, **kwargs):
 		
 		# Demonstrate periodic decorator and settings access
 		
-		@Core.periodic(10)
+		"""
+		@Core.periodic(60)
 		def send_request_weather(self):
 			self.vip.pubsub.publish(peer='pubsub',topic='weather/request',headers={'requesterID': 'agent1'},message={'region':'Belgium','city':'Leuven'})
+		"""
 		
 		@Core.periodic(10)
 		def lookup_data(self):
@@ -182,7 +184,7 @@ def subscriber_agent(config_path, **kwargs):
 				print ("Could not contact historian. Is it running?")
 				print(e)
 		
-		#@Core.periodic(10)
+		@Core.periodic(10)
 		def pub_fake_data(self):
 			''' This method publishes fake data for use by the rest of the agent.
 			The format mimics the format used by VOLTTRON drivers.

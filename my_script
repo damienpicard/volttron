@@ -24,7 +24,7 @@ function installAgents {
 path=("applications/dap" "services/core" "services/core" "applications/dap")
 agentFolder=("TestAgent" "WeatherAgent" "sMAPHistorian" "ExampleSubscriber")
 agentName=("test" "weather" "historian" "subscriber")
-counter=(0 1 3)
+counter=(2 3)
 
 # Install agents
 for i in ${counter[*]}

@@ -69,7 +69,7 @@ setup(
     packages = packages,
     entry_points = {
         'setuptools.installation': [
-            'eggsecutable = ' + package + '.subscriber_agent:main',
+            'eggsecutable = ' + package + '.agent:main',
         ]
     }
 )
